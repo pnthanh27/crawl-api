@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
+require('dotenv').config();
 
 // Đường dẫn file Postman Collection
 const postmanFile = path.join(process.cwd(), 'crawlapi.postman_collection.json');
@@ -140,12 +141,13 @@ function attachNetworkListener(page) {
  */
 async function main() {
     const args = process.argv.slice(2);
-    if (args.length === 0) {
-        console.error('Usage: node api-sniffer.js <URL>');
+    const targetUrl = args[0] || process.env.TARGET_URL;
+
+    if (!targetUrl) {
+        console.error('Usage: node api-sniffer.js [URL]');
+        console.error('Or set TARGET_URL in .env file');
         process.exit(1);
     }
-
-    const targetUrl = args[0];
 
     try {
         logSystem(`[Info] Đang khởi động Puppeteer browser...`);

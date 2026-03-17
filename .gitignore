@@ -3,3 +3,4 @@ crawlapi.postman_collection.json
 crawlapi.postman_collection.sample.json
 api-logs.txt
 .DS_Store
+.env
