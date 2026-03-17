@@ -5,7 +5,7 @@ const { URL } = require('url');
 require('dotenv').config();
 
 // Đường dẫn file Postman Collection
-const postmanFile = path.join(process.cwd(), 'crawlapi.postman_collection.json');
+let postmanFile = path.join(process.cwd(), 'crawlapi.postman_collection.json');
 
 // Cấu trúc gốc của Postman Collection
 let postmanCollection = {
@@ -147,6 +147,14 @@ async function main() {
         console.error('Usage: node api-sniffer.js [URL]');
         console.error('Or set TARGET_URL in .env file');
         process.exit(1);
+    }
+
+    try {
+        const urlObj = new URL(targetUrl);
+        const domain = urlObj.hostname;
+        postmanFile = path.join(process.cwd(), `${domain}.postman_collection.json`);
+    } catch (e) {
+        console.warn('[Warning] Target URL không hợp lệ, dùng tên file mặc định.');
     }
 
     try {
