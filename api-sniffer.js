@@ -65,18 +65,24 @@ function appendToPostmanCollection(request) {
             urlQuery.push({ key, value });
         }
 
+        const postmanUrl = {
+            raw: reqUrl,
+            protocol: urlObj.protocol.replace(':', ''),
+            host: urlHost,
+            path: urlPath,
+            query: urlQuery
+        };
+        
+        if (urlObj.port) {
+            postmanUrl.port = urlObj.port;
+        }
+
         const postmanItem = {
-            name: urlObj.pathname === '/' ? urlObj.hostname : urlObj.pathname,
+            name: urlObj.pathname === '/' ? urlObj.host : urlObj.pathname,
             request: {
                 method: method,
                 header: headerArr,
-                url: {
-                    raw: reqUrl,
-                    protocol: urlObj.protocol.replace(':', ''),
-                    host: urlHost,
-                    path: urlPath,
-                    query: urlQuery
-                }
+                url: postmanUrl
             },
             response: [] // Hiện tại để trống array response (có thể mở rộng sau)
         };
