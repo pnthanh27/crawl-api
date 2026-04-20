@@ -170,11 +170,19 @@ async function main() {
         // Tạo file Postman JSON ban đầu
         fs.writeFileSync(postmanFile, JSON.stringify(postmanCollection, null, 4), 'utf8');
 
-        const browser = await puppeteer.launch({
+        const chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+        const launchOptions = {
             headless: false,
-            defaultViewport: null, // Allow viewport to adapt to the window size
-            args: ['--start-maximized'] // Attempt to start maximized
-        });
+            defaultViewport: null, 
+            args: ['--start-maximized']
+        };
+
+        if (fs.existsSync(chromePath)) {
+            logSystem(`[Info] Đang sử dụng Chrome hệ thống tại: ${chromePath}`);
+            launchOptions.executablePath = chromePath;
+        }
+
+        const browser = await puppeteer.launch(launchOptions);
 
         // Listen for new targets (new tabs/popups)
         browser.on('targetcreated', async (target) => {
